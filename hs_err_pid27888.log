@@ -1,0 +1,103 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 32744 bytes for ChunkPool::allocate
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Unscaled Compressed Oops mode in which the Java heap is
+#     placed in the first 4GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 4GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (arena.cpp:78), pid=27888, tid=30668
+#
+# JRE version: OpenJDK Runtime Environment Temurin-17.0.5+8 (17.0.5+8) (build 17.0.5+8)
+# Java VM: OpenJDK 64-Bit Server VM Temurin-17.0.5+8 (17.0.5+8, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED -XX:MaxMetaspaceSize=256m -XX:+HeapDumpOnOutOfMemoryError -Xms256m -Xmx512m -Dfile.encoding=windows-1252 -Duser.country=US -Duser.language=en -Duser.variant org.gradle.launcher.daemon.bootstrap.GradleDaemon 7.5.1
+
+Host: Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz, 12 cores, 15G,  Windows 10 , 64 bit Build 19041 (10.0.19041.3636)
+Time: Sun Feb  4 13:04:29 2024 Pacific Standard Time elapsed time: 307.205508 seconds (0d 0h 5m 7s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000001f9114efed0):  JavaThread "C2 CompilerThread0" daemon [_thread_in_native, id=30668, stack(0x0000004c5cc00000,0x0000004c5cd00000)]
+
+
+Current CompileTask:
+C2: 307205 13160       4       org.gradle.internal.instantiation.generator.AbstractClassGenerator$GeneratedClassImpl$GeneratedConstructorImpl::newInstance (15 bytes)
+
+Stack: [0x0000004c5cc00000,0x0000004c5cd00000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x676b3a]
+V  [jvm.dll+0x831444]
+V  [jvm.dll+0x832bee]
+V  [jvm.dll+0x833253]
+V  [jvm.dll+0x244ce5]
+V  [jvm.dll+0xabdcc]
+V  [jvm.dll+0xac17c]
+V  [jvm.dll+0x6178b3]
+V  [jvm.dll+0x35f570]
+V  [jvm.dll+0x35ff90]
+V  [jvm.dll+0x2d0706]
+V  [jvm.dll+0x63bec7]
+V  [jvm.dll+0x1111ec]
+V  [jvm.dll+0x33d296]
+V  [jvm.dll+0x6924e6]
+V  [jvm.dll+0x691832]
+V  [jvm.dll+0x68cd2d]
+V  [jvm.dll+0x686f0b]
+V  [jvm.dll+0x686547]
+V  [jvm.dll+0x684442]
+V  [jvm.dll+0x1a668c]
+V  [jvm.dll+0x2aaf94]
+V  [jvm.dll+0x68ee27]
+V  [jvm.dll+0x686f0b]
+V  [jvm.dll+0x686547]
+V  [jvm.dll+0x684442]
+V  [jvm.dll+0x1a668c]
+V  [jvm.dll+0x1a7256]
+V  [jvm.dll+0x2aaf94]
+V  [jvm.dll+0x68ee27]
+V  [jvm.dll+0x686f0b]
+V  [jvm.dll+0x686547]
+V  [jvm.dll+0x684442]
+V  [jvm.dll+0x1a668c]
+V  [jvm.dll+0x1a7256]
+V  [jvm.dll+0x2aaf94]
+V  [jvm.dll+0x68ee27]
+V  [jvm.dll+0x686f0b]
+V  [jvm.dll+0x686547]
+V  [jvm.dll+0x684442]
+V  [jvm.dll+0x1a668c]
+V  [jvm.dll+0x1a7256]
+V  [jvm.dll+0x1a7256]
+V  [jvm.dll+0x2aaf94]
+V  [jvm.dll+0x68ee27]
+V  [jvm.dll+0x686f0b]
+V  [jvm.dll+0x686547]
+V  [jvm.dll+0x684442]
+V  [jvm.dll+0x1a668c]
+V  [jvm.dll+0x216b38]
+V  [jvm.dll+0x1a343d]
+V  [jvm.dll+0x22698a]
+V  [jvm.dll+0x224ac5]
+V  [jvm.dll+0x7e727b]
+V  [jvm.dll+0x7e17ea]
+V  [jvm.dll+0x6759e5]
+C  [ucrtbase.dll+0x21bb2]
+C  [KERNEL32.DLL+0x17344]
+C  [ntdll.dll+0x526b1]
