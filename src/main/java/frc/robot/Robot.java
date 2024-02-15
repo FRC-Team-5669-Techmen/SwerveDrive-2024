@@ -126,12 +126,26 @@ public class Robot extends TimedRobot {
   if (SpeedMulti != 0) {
     speed = speed * SpeedMulti;
   }
-  if (turn != 0 ) {
-  Methods.Turn(135, Constants.m_rightTurn, Constants.coder_right, turn, Constants.m_rightDrive);
+  if (turn != 0 && Turnable == true) {
+  speedable = false;
+  Methods.Turn(45, Constants.m_rightTurn, Constants.coder_right, turn, Constants.m_rightDrive);
   Methods.Turn(45,  Constants.m_leftBTurn, Constants.coder_leftB, turn, Constants.m_leftBDrive);
-  Methods.Turn(45, Constants.m_leftTurn, Constants.coder_left, turn, Constants.m_leftDrive);
+  Methods.Turn(135, Constants.m_leftTurn, Constants.coder_left, turn, Constants.m_leftDrive);
   Methods.Turn(135,  Constants.m_rightBTurn, Constants.coder_rightB, turn, Constants.m_rightBDrive);
   
+  }
+else {
+  speedable = true;
+}
+  if ((speed - 0.0078125) != 0 && speedable == true){
+    Turnable = false; 
+    Methods.Turn(0, Constants.m_rightTurn, Constants.coder_right, speed, Constants.m_rightDrive);
+    Methods.Turn(0,  Constants.m_leftBTurn, Constants.coder_leftB, speed, Constants.m_leftBDrive);
+    Methods.Turn(0, Constants.m_leftTurn, Constants.coder_left, speed, Constants.m_leftDrive);
+    Methods.Turn(0,  Constants.m_rightBTurn, Constants.coder_rightB, speed, Constants.m_rightBDrive);
+  }
+  else {
+    Turnable = true;
   }
   //speedForMotor = Math.pow(speed, 3);
   //turnForMotor = Math.pow(turn, 3);
