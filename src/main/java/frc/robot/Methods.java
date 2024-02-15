@@ -73,6 +73,10 @@ public class Methods{
     // Calculate target positions in encoder ticks
     int targetPosition1 = (int) (targetAngleDegrees / 360.0 * unitsPerRotation);
     int targetPosition2 = (int) ((targetAngleDegrees - 180.0) / 360.0 * unitsPerRotation); // Assuming a 180-degree difference
+    double drivepos = drive.getSelectedSensorPosition();
+    //double Remainder = drivepos%26214.4;
+    //double How_many_rotations = drivepos-Remainder;
+    
     System.out.println("targetPosition1 " +targetPosition1);
     System.out.println("targetPosition2 " +targetPosition2);
     // Read current sensor position
@@ -80,28 +84,28 @@ public class Methods{
     System.out.println("coderposABS " +coderposABS);
     
     // Set drive motor position based on the closest target position
-    if (Math.abs(coderposABS - targetPosition1) < Math.abs(coderposABS - targetPosition2)) {
+    if (Math.abs(coderposABS - targetPosition1/ unitsPerRotation) < Math.abs(coderposABS - targetPosition2/ unitsPerRotation)) {
         drive.config_kP(0,0.5);
-        drive.set(ControlMode.Position, targetPosition1);
+        drive.set(ControlMode.Position,(targetPosition1 * 12.8));
         System.out.println("this");
     } else {
         drive.config_kP(0,0.5);
-        drive.set(ControlMode.Position, targetPosition2);
+        drive.set(ControlMode.Position, (targetPosition2* 12.8));
         System.out.println("that");
         
     }
     // Check if desired position reached within a threshold
-    double threshold = 5.0; // Adjust as needed
-    double drivepos = drive.getSelectedSensorPosition();
+    double threshold = 15.0; // Adjust as needed
     System.out.println("drivepos" + drivepos);
-    System.out.println("Math.abs(coderposABS - targetPosition1) < threshold " +( Math.abs(coderposABS - (targetPosition1/unitsPerRotation)) ));
-    System.out.println("Math.abs(coderposABS - targetPosition2) < threshold " +( Math.abs(coderposABS - (targetPosition2/unitsPerRotation)) ));
-    if (Math.abs(coderposABS - (targetPosition1/unitsPerRotation)) < threshold || Math.abs(coderposABS - (targetPosition2/unitsPerRotation)) < threshold) {
+    System.out.println("Math.abs(coderposABS - targetPosition1) < threshold " +( (Math.abs(coderposABS - (targetPosition1/unitsPerRotation)))/12.8 ));
+    System.out.println("Math.abs(coderposABS - targetPosition2) < threshold " +( (Math.abs(coderposABS - (targetPosition2/unitsPerRotation)))/12.8 ));
+    if ((Math.abs(coderposABS - (targetPosition1/unitsPerRotation))/12.8) < threshold || (Math.abs(coderposABS - (targetPosition2/unitsPerRotation))/12.8) < threshold) {
         // Activate the other motor once the desired position is reached
         double Motorspeed1 = turnspeed * 0.20;
         Motor.set(ControlMode.PercentOutput, Motorspeed1); // Adjust for your motor
     }
 }
+/* 
   public static void Move(double Motorspeed, TalonSRX Motor, TalonSRX MTurn, CANCoder coder, int con1, int con2){
     double drivepos = MTurn.getSelectedSensorPosition();
     double coderpos = coder.getPosition();
@@ -127,6 +131,7 @@ public class Methods{
       
       
     }
+    */
     /*
      if (Difference2 >Difference1){
       MTurn.set(ControlMode.Position,drivepos + con1*13.4);
@@ -135,6 +140,6 @@ public class Methods{
     
     
 
-    }
+    
 }
   
