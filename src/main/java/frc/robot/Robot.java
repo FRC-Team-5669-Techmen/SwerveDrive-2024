@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
   double turnForMotor;
   boolean Turnable;
   boolean speedable;
+  boolean IsFoward;
   
 
   private final Timer m_timer = new Timer();
@@ -126,12 +127,24 @@ public class Robot extends TimedRobot {
   if (SpeedMulti != 0) {
     speed = speed * SpeedMulti;
   }
+  if (turn == 0 && (speed- 0.0078125) == 0) {
+    IsFoward = false;
+    Methods.StandStill(Constants.m_rightTurn, Constants.m_rightDrive);
+    Methods.StandStill(Constants.m_leftBTurn, Constants.m_leftBDrive);
+    Methods.StandStill(Constants.m_leftTurn, Constants.m_leftDrive);
+    Methods.StandStill(Constants.m_rightBTurn, Constants.m_rightBDrive);
+    
+    }
   if (turn != 0 && Turnable == true) {
   speedable = false;
-  Methods.Turn(45, Constants.m_rightTurn, Constants.coder_right, turn, Constants.m_rightDrive);
-  Methods.Turn(45,  Constants.m_leftBTurn, Constants.coder_leftB, turn, Constants.m_leftBDrive);
-  Methods.Turn(135, Constants.m_leftTurn, Constants.coder_left, turn, Constants.m_leftDrive);
-  Methods.Turn(135,  Constants.m_rightBTurn, Constants.coder_rightB, turn, Constants.m_rightBDrive);
+  IsFoward = false;
+
+  System.out.println("Turn:" + Constants.m_controller.getRawAxis(4));
+  System.out.println("Speed:" +-Constants.m_controller.getRawAxis(1));
+  Methods.Turn(45, Constants.m_rightTurn, Constants.coder_right, -turn *3, Constants.m_rightDrive, true);
+  Methods.Turn(45,  Constants.m_leftBTurn, Constants.coder_leftB, turn*3, Constants.m_leftBDrive, false);
+  Methods.Turn(135, Constants.m_leftTurn, Constants.coder_left, -turn*3, Constants.m_leftDrive,false );
+  Methods.Turn(135,  Constants.m_rightBTurn, Constants.coder_rightB, turn*3, Constants.m_rightBDrive, false);
   
   }
 else {
@@ -139,10 +152,19 @@ else {
 }
   if ((speed - 0.0078125) != 0 && speedable == true){
     Turnable = false; 
-    Methods.Turn(0, Constants.m_rightTurn, Constants.coder_right, speed, Constants.m_rightDrive);
-    Methods.Turn(0,  Constants.m_leftBTurn, Constants.coder_leftB, speed, Constants.m_leftBDrive);
-    Methods.Turn(0, Constants.m_leftTurn, Constants.coder_left, speed, Constants.m_leftDrive);
-    Methods.Turn(0,  Constants.m_rightBTurn, Constants.coder_rightB, speed, Constants.m_rightBDrive);
+    //System.out.println("Turn:" + Constants.m_controller.getRawAxis(4));
+    //System.out.println("Speed:" +-Constants.m_controller.getRawAxis(1));
+    if (IsFoward == false){
+      Methods.Turn(0, Constants.m_rightTurn, Constants.coder_right, speed, Constants.m_rightDrive, true);
+      Methods.Turn(0,  Constants.m_leftBTurn, Constants.coder_leftB, speed, Constants.m_leftBDrive, false);
+      Methods.Turn(0, Constants.m_leftTurn, Constants.coder_left, speed, Constants.m_leftDrive, false);
+      Methods.Turn(0,  Constants.m_rightBTurn, Constants.coder_rightB, speed, Constants.m_rightBDrive, false);
+      IsFoward = true;
+    }
+    Methods.Move(0, Constants.m_rightTurn, Constants.coder_right, speed, Constants.m_rightDrive);
+    Methods.Move(0, Constants.m_leftBTurn,Constants.coder_leftB, speed, Constants.m_leftBDrive);
+    Methods.Move(0, Constants.m_leftTurn,Constants.coder_left, speed, Constants.m_leftDrive);
+    Methods.Move(0,  Constants.m_rightBTurn,Constants.coder_rightB, speed, Constants.m_rightBDrive);
   }
   else {
     Turnable = true;
@@ -219,4 +241,5 @@ else {
   @Override
   public void testPeriodic() {}
 }
+
 
