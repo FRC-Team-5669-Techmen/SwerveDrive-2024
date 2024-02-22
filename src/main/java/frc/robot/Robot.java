@@ -40,6 +40,8 @@ public class Robot extends TimedRobot {
   private Constants Constants = new Constants();
   
   double SpeedMulti;
+  double Y_axis_speed;
+  double X_axis_speed;
   double speed;
   double speedForMotor;
   double turn;
@@ -121,13 +123,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
   SpeedMulti = Constants.m_controller.getRawAxis(3)*2;
-  speed = -Constants.m_controller.getRawAxis(1);
+  Y_axis_speed = -Constants.m_controller.getRawAxis(1);
+  X_axis_speed = -Constants.m_controller.getRawAxis(0);
+  speed = ((Y_axis_speed+X_axis_speed)/2);
   turn = Constants.m_controller.getRawAxis(4);
 
   if (SpeedMulti != 0) {
     speed = speed * SpeedMulti;
   }
-  if (turn == 0 && (speed- 0.0078125) == 0) {
+  if (turn == 0 && (Math.abs(speed) < 0.1)) {
     IsFoward = false;
     Methods.StandStill(Constants.m_rightTurn, Constants.m_rightDrive);
     Methods.StandStill(Constants.m_leftBTurn, Constants.m_leftBDrive);
@@ -135,39 +139,23 @@ public class Robot extends TimedRobot {
     Methods.StandStill(Constants.m_rightBTurn, Constants.m_rightBDrive);
     
     }
-  if (turn != 0 && Turnable == true) {
-  speedable = false;
-  IsFoward = false;
+  if (turn != 0) {
 
   System.out.println("Turn:" + Constants.m_controller.getRawAxis(4));
   System.out.println("Speed:" +-Constants.m_controller.getRawAxis(1));
-  Methods.Turn(45, Constants.m_rightTurn, Constants.coder_right, -turn *3, Constants.m_rightDrive, true);
-  Methods.Turn(45,  Constants.m_leftBTurn, Constants.coder_leftB, turn*3, Constants.m_leftBDrive, false);
-  Methods.Turn(135, Constants.m_leftTurn, Constants.coder_left, -turn*3, Constants.m_leftDrive,false );
-  Methods.Turn(135,  Constants.m_rightBTurn, Constants.coder_rightB, turn*3, Constants.m_rightBDrive, false);
+  Methods.Turn(45, Constants.m_rightTurn, Constants.coder_right, -turn, Constants.m_rightDrive, true);
+  Methods.Turn(45,  Constants.m_leftBTurn, Constants.coder_leftB, turn, Constants.m_leftBDrive, false);
+  Methods.Turn(135, Constants.m_leftTurn, Constants.coder_left, -turn, Constants.m_leftDrive,false );
+  Methods.Turn(135,  Constants.m_rightBTurn, Constants.coder_rightB, turn, Constants.m_rightBDrive, false);
   
   }
-else {
-  speedable = true;
-}
-  if ((speed - 0.0078125) != 0 && speedable == true){
-    Turnable = false; 
+  if (Math.abs(speed)  >= 0.1){
     //System.out.println("Turn:" + Constants.m_controller.getRawAxis(4));
     //System.out.println("Speed:" +-Constants.m_controller.getRawAxis(1));
-    if (IsFoward == false){
-      Methods.Turn(0, Constants.m_rightTurn, Constants.coder_right, speed, Constants.m_rightDrive, true);
-      Methods.Turn(0,  Constants.m_leftBTurn, Constants.coder_leftB, speed, Constants.m_leftBDrive, false);
-      Methods.Turn(0, Constants.m_leftTurn, Constants.coder_left, speed, Constants.m_leftDrive, false);
-      Methods.Turn(0,  Constants.m_rightBTurn, Constants.coder_rightB, speed, Constants.m_rightBDrive, false);
-      IsFoward = true;
-    }
-    Methods.Move(0, Constants.m_rightTurn, Constants.coder_right, speed, Constants.m_rightDrive);
-    Methods.Move(0, Constants.m_leftBTurn,Constants.coder_leftB, speed, Constants.m_leftBDrive);
-    Methods.Move(0, Constants.m_leftTurn,Constants.coder_left, speed, Constants.m_leftDrive);
-    Methods.Move(0,  Constants.m_rightBTurn,Constants.coder_rightB, speed, Constants.m_rightBDrive);
-  }
-  else {
-    Turnable = true;
+    Methods.Move(Constants.m_rightTurn, Constants.coder_right, Y_axis_speed, X_axis_speed, speed, Constants.m_rightDrive,false);
+    Methods.Move(Constants.m_leftBTurn, Constants.coder_leftB, Y_axis_speed, X_axis_speed, speed, Constants.m_leftBDrive,true);
+    Methods.Move(Constants.m_leftTurn, Constants.coder_left, Y_axis_speed, X_axis_speed, speed, Constants.m_leftDrive,false);
+    Methods.Move(Constants.m_rightBTurn, Constants.coder_rightB, Y_axis_speed, X_axis_speed, speed, Constants.m_rightBDrive,false);
   }
   //speedForMotor = Math.pow(speed, 3);
   //turnForMotor = Math.pow(turn, 3);
@@ -241,5 +229,4 @@ else {
   @Override
   public void testPeriodic() {}
 }
-
 
