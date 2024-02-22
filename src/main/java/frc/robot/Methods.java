@@ -137,12 +137,27 @@ public static void StandStill(TalonSRX drive, TalonSRX Motor){
   Motor.set(ControlMode.PercentOutput, 0);
 }
 
-public static void Move(double targetAngleDegrees, TalonSRX drive, CANCoder coder, double turnspeed, TalonSRX Motor) {
+ // Make it find the best pos
+public static void Move(TalonSRX drive, CANCoder coder, double Y_axis_turnspeed, double X_axis_turnspeed, double turnspeed, TalonSRX Motor, boolean Debug) {
   double unitsPerRotation = 2048.0;
+  double targetAngleDegrees = Math.atan(X_axis_turnspeed/ Y_axis_turnspeed );
     double drivepos = drive.getSelectedSensorPosition();
     // Calculate target positions in encoder ticks
-    int targetPosition1 = (int) (targetAngleDegrees / 360.0 * unitsPerRotation);
-    int targetPosition2 = (int) ((targetAngleDegrees - 180.0) / 360.0 * unitsPerRotation); // Assuming a 180-degree difference
+  if (targetAngleDegrees >= 180){
+    targetAngleDegrees -= 360;
+    if (Debug == true){
+      System.out.println("targetAngleDegrees" +targetAngleDegrees);
+    }
+    
+  }
+  
+
+  double targetAngleDegrees_After_Calculations = (targetAngleDegrees/2) * unitsPerRotation;
+  if (Debug == true){
+    System.out.println("targetAngleDegrees_After_Calculations" +targetAngleDegrees_After_Calculations);
+  }
+  
+
     //double Remainder = drivepos%26214.4;
     //double How_many_rotations = drivepos-Remainder;
     
@@ -152,12 +167,17 @@ public static void Move(double targetAngleDegrees, TalonSRX drive, CANCoder code
     double coderposABS = coder.getAbsolutePosition();
     int Negative_multi;
     double threshold = 13.0; 
-    if ((Math.abs(coderposABS - (targetPosition2/unitsPerRotation))/12.8) < threshold){
+    if (targetAngleDegrees < 0){
       Negative_multi = -1;
+      if (Debug == true){
+        System.out.println("Multi" +Negative_multi);
+      }
+      
     }
     else{
       Negative_multi = 1;
     }
+
     // Check if desired position reached within a threshold
     // Adjust as needed
     //System.out.println("drivepos" + drivepos);
@@ -165,7 +185,9 @@ public static void Move(double targetAngleDegrees, TalonSRX drive, CANCoder code
     //System.out.println("Math.abs(coderposABS - targetPosition2) < threshold " +( (Math.abs(coderposABS - (targetPosition2/unitsPerRotation)))/12.8 ));
         // Activate the other motor once the desired position is reached
     //drive.setNeutralMode(NeutralMode.Brake);
-    double Motorspeed1 = turnspeed * 0.20;
+    drive.config_kP(0,0.25);
+    drive.set(ControlMode.Position,(targetAngleDegrees_After_Calculations * 12.8));
+    double Motorspeed1 = turnspeed * 0.40;
    Motor.set(ControlMode.PercentOutput, Motorspeed1 * Negative_multi ); // Adjust for your motor
     
   }
