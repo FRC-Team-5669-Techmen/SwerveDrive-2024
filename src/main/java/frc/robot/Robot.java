@@ -141,8 +141,7 @@ public class Robot extends TimedRobot {
     }
   if (turn != 0) {
 
-  System.out.println("Turn:" + Constants.m_controller.getRawAxis(4));
-  System.out.println("Speed:" +-Constants.m_controller.getRawAxis(1));
+
   Methods.Turn(45, Constants.m_rightTurn, Constants.coder_right, -turn, Constants.m_rightDrive, true);
   Methods.Turn(45,  Constants.m_leftBTurn, Constants.coder_leftB, turn, Constants.m_leftBDrive, false);
   Methods.Turn(135, Constants.m_leftTurn, Constants.coder_left, -turn, Constants.m_leftDrive,false );
@@ -152,6 +151,8 @@ public class Robot extends TimedRobot {
   if (Math.abs(speed)  >= 0.1){
     //System.out.println("Turn:" + Constants.m_controller.getRawAxis(4));
     //System.out.println("Speed:" +-Constants.m_controller.getRawAxis(1));
+    //System.out.println("Turn:" + Constants.m_controller.getRawAxis(4));
+    //System.out.println("Speed:" + speed);
     Methods.Move(Constants.m_rightTurn, Constants.coder_right, Y_axis_speed, X_axis_speed, speed, Constants.m_rightDrive,false);
     Methods.Move(Constants.m_leftBTurn, Constants.coder_leftB, Y_axis_speed, X_axis_speed, speed, Constants.m_leftBDrive,true);
     Methods.Move(Constants.m_leftTurn, Constants.coder_left, Y_axis_speed, X_axis_speed, speed, Constants.m_leftDrive,false);
