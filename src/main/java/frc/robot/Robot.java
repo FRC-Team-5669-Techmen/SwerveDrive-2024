@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
   boolean Turnable;
   boolean speedable;
   boolean IsFoward;
+  int Ticks;
   
 
   private final Timer m_timer = new Timer();
@@ -122,10 +123,21 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during teleoperated mode. */
   @Override
   public void teleopPeriodic() {
+    Ticks = Ticks + 1;
   SpeedMulti = Constants.m_controller.getRawAxis(3)*2;
   Y_axis_speed = -Constants.m_controller.getRawAxis(1);
-  X_axis_speed = -Constants.m_controller.getRawAxis(0);
-  speed = ((Y_axis_speed+X_axis_speed)/2);
+  X_axis_speed = Constants.m_controller.getRawAxis(0);
+  if (Math.abs(Y_axis_speed)>Math.abs(X_axis_speed)){
+    speed = Y_axis_speed;
+  }
+  else{
+    
+    speed = Math.abs(X_axis_speed);
+    if (Y_axis_speed !=0){
+      speed = speed * Math.signum(Y_axis_speed);
+    }
+  }
+  
   turn = Constants.m_controller.getRawAxis(4);
 
   if (SpeedMulti != 0) {
@@ -153,10 +165,10 @@ public class Robot extends TimedRobot {
     //System.out.println("Speed:" +-Constants.m_controller.getRawAxis(1));
     //System.out.println("Turn:" + Constants.m_controller.getRawAxis(4));
     //System.out.println("Speed:" + speed);
-    Methods.Move(Constants.m_rightTurn, Constants.coder_right, Y_axis_speed, X_axis_speed, speed, Constants.m_rightDrive,false);
-    Methods.Move(Constants.m_leftBTurn, Constants.coder_leftB, Y_axis_speed, X_axis_speed, speed, Constants.m_leftBDrive,true);
-    Methods.Move(Constants.m_leftTurn, Constants.coder_left, Y_axis_speed, X_axis_speed, speed, Constants.m_leftDrive,false);
-    Methods.Move(Constants.m_rightBTurn, Constants.coder_rightB, Y_axis_speed, X_axis_speed, speed, Constants.m_rightBDrive,false);
+    Methods.Move(Constants.m_rightTurn, Constants.coder_right, Y_axis_speed, -X_axis_speed, speed, Constants.m_rightDrive,false,Ticks);
+    Methods.Move(Constants.m_leftBTurn, Constants.coder_leftB, Y_axis_speed, -X_axis_speed, speed, Constants.m_leftBDrive,true,Ticks);
+    Methods.Move(Constants.m_leftTurn, Constants.coder_left, Y_axis_speed, -X_axis_speed, speed, Constants.m_leftDrive,false,Ticks);
+    Methods.Move(Constants.m_rightBTurn, Constants.coder_rightB, Y_axis_speed, -X_axis_speed, speed, Constants.m_rightBDrive,false,Ticks);
   }
   //speedForMotor = Math.pow(speed, 3);
   //turnForMotor = Math.pow(turn, 3);
