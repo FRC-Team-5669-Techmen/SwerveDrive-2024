@@ -45,12 +45,12 @@ public class Methods{
     if (Math.abs(coderposABS - targetPosition1/ unitsPerRotation) < Math.abs(coderposABS - targetPosition2/ unitsPerRotation)) {
         drive.config_kP(0,0.25);
         drive.set(ControlMode.Position,(targetPosition1 * 12.8));
-        System.out.println("cposABS " + coderposABS + " this " +(targetPosition1/unitsPerRotation)* 360.0);
+        //System.out.println("cposABS " + coderposABS + " this " +(targetPosition1/unitsPerRotation)* 360.0);
         Is_Negative = false;
     } else {
         drive.config_kP(0,0.25);
         drive.set(ControlMode.Position, (targetPosition2* 12.8));
-        System.out.println("cposABS " + coderposABS + " this " +(targetPosition1/unitsPerRotation)* 360.0);
+        //System.out.println("cposABS " + coderposABS + " this " +(targetPosition1/unitsPerRotation)* 360.0);
         Is_Negative = true;
         
     }
@@ -100,13 +100,41 @@ public static void StandStill(TalonSRX drive, TalonSRX Motor){
 
 
  // Make it find the best pos
-public static void Move(TalonSRX drive, CANCoder coder, double Y_axis_turnspeed, double X_axis_turnspeed, double turnspeed, TalonSRX Motor, boolean Debug) {
+public static void Move(TalonSRX drive, CANCoder coder, double Y_axis_turnspeed, double X_axis_turnspeed, double turnspeed, TalonSRX Motor, boolean Debug, int Time) {
   double unitsPerRotation = 2048.0;
   double targetPosition1;
   double targetPosition2;
   double targetPosition;
   
-  double targetAngleDegrees = Math.atan(X_axis_turnspeed/ Y_axis_turnspeed );
+  double targetAngleDegrees = Math.atan(X_axis_turnspeed/ Y_axis_turnspeed ) * (180/Math.PI);
+  /* 
+  if (Y_axis_turnspeed <= -0.0){
+    
+    targetAngleDegrees = targetAngleDegrees -180;
+    if (X_axis_turnspeed >= 0.0){
+      //-y, -x
+      targetAngleDegrees = targetAngleDegrees;
+    }
+    if (X_axis_turnspeed<= -0.0){
+      //-y, -x
+      targetAngleDegrees = targetAngleDegrees-90;
+    }
+    else{
+      //-y, x
+      targetAngleDegrees = targetAngleDegrees +90;
+    }
+  }*/
+   /* 
+  else{
+    if (X_axis_turnspeed<= -0.0){
+      //y, -x
+      targetAngleDegrees = targetAngleDegrees;
+    }
+    else{
+      //y, x
+      targetAngleDegrees = targetAngleDegrees -180;
+    }
+  }*/ 
     double drivepos = drive.getSelectedSensorPosition();
     // Calculate target positions in encoder ticks
   if (targetAngleDegrees >= 180){
@@ -119,29 +147,33 @@ public static void Move(TalonSRX drive, CANCoder coder, double Y_axis_turnspeed,
   }
   //targetPosition2 = targetPosition2/ 360.0;
   //targetPosition1 = targetPosition1/ 360.0;
+  if (targetAngleDegrees >= 180){
+    targetAngleDegrees -= 180;
+  }
   
 
   
   int Negative_multi;
   double coderposABS = coder.getAbsolutePosition();
-  if (Math.abs(coderposABS - targetPosition1*360) < Math.abs(coderposABS - targetPosition2*360)) {
+  if (Math.abs(targetAngleDegrees) < 180) {
     targetPosition = targetPosition1;
     Negative_multi = 1;
 } else {
   targetPosition = targetPosition2;
     Negative_multi = -1;
 }
-    double targetAngleDegrees_After_Calculations = (targetPosition) ;
+  double targetAngleDegrees_After_Calculations = (targetAngleDegrees) ;
     if (Debug == true){
-    System.out.println("targetAngleDegrees_After_Calculations" +targetAngleDegrees_After_Calculations);
-    System.out.println("targetPosition2" +targetPosition2);
-    System.out.println("targetPosition1" +targetPosition1);
+      if (Time%5 == 0){
+        System.out.println(" targetAngle_AC " +targetAngleDegrees_After_Calculations + " Y_speed " +Y_axis_turnspeed + " X_speed " +X_axis_turnspeed+ " Multi " +Negative_multi+ " speed " +turnspeed);
+      }
+    
   }
   
     drive.config_kP(0,0.25);
-    drive.set(ControlMode.Position,(targetAngleDegrees_After_Calculations)* unitsPerRotation*12.8/5);
-    double Motorspeed1 = turnspeed * 0.60;
-   Motor.set(ControlMode.PercentOutput, Motorspeed1 * Negative_multi ); // Adjust for your motor
+    drive.set(ControlMode.Position,(targetAngleDegrees_After_Calculations)* unitsPerRotation*12.8/360);
+    double Motorspeed1 = turnspeed * 0.10;
+   Motor.set(ControlMode.PercentOutput, Motorspeed1 * Negative_multi); // Adjust for your motor
 
 }
 }
