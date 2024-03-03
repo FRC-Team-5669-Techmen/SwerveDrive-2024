@@ -176,5 +176,13 @@ public static void Move(TalonSRX drive, CANCoder coder, double Y_axis_turnspeed,
    Motor.set(ControlMode.PercentOutput, Motorspeed1 * Negative_multi); // Adjust for your motor
 
 }
+public static void ArmMovement(TalonSRX Motor1, double Amount_Moved){
+  double unitsPerRotation = 2048.0;
+  double drivepos = Motor1.getSelectedSensorPosition();
+  Amount_Moved *= (180/Math.PI);
+  Motor1.config_kP(0,0.25);
+  Motor1.set(ControlMode.Position,(Amount_Moved* unitsPerRotation/360)+ drivepos);
+}
+  
 }
   
