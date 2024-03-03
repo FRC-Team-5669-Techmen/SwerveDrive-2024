@@ -70,6 +70,7 @@ public class Robot extends TimedRobot {
     // gearbox is constructed, you might have to invert the left side instead.
     Constants.m_rightDrive.setInverted(true);
     Constants.m_rightBDrive.setInverted(true);
+    Constants.m_Arm1.setInverted(true);
  
 /* 
  
@@ -170,6 +171,16 @@ public class Robot extends TimedRobot {
     Methods.Move(Constants.m_leftTurn, Constants.coder_left, Y_axis_speed, -X_axis_speed, speed, Constants.m_leftDrive,false,Ticks);
     Methods.Move(Constants.m_rightBTurn, Constants.coder_rightB, Y_axis_speed, -X_axis_speed, speed, Constants.m_rightBDrive,false,Ticks);
   }
+        // B Button
+    if (Constants.m_controller.getRawButtonPressed(2)){
+      Methods.ArmMovement(Constants.m_Arm1, 10);
+      Methods.ArmMovement(Constants.m_Arm2, 10);
+    }
+    // Y Button
+    if (Constants.m_controller.getRawButtonPressed(4)){
+      Methods.ArmMovement(Constants.m_Arm1, -10);
+      Methods.ArmMovement(Constants.m_Arm2, -10);
+    }
   //speedForMotor = Math.pow(speed, 3);
   //turnForMotor = Math.pow(turn, 3);
 /* 
