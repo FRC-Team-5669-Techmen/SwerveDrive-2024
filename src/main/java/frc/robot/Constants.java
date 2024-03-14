@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -53,7 +53,7 @@ public final class Constants {
     private static final int ID_Shooter1 = 18;
     private static final int ID_Shooter2 = 19;
     private static final MotorType kMotorType = MotorType.kBrushless;
-    AnalogEncoder encoder = new AnalogEncoder(0);
+    DutyCycleEncoder encoder = new DutyCycleEncoder(5);
 
 
 // etsablishes the devices with there ids to be called later in the code

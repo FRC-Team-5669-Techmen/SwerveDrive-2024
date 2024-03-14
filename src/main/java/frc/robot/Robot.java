@@ -63,13 +63,16 @@ public class Robot extends TimedRobot {
   /** This function is run once each time the robot enters autonomous mode. */
   @Override
   public void autonomousInit() {
-    m_timer.reset();
-    m_timer.start();
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    Methods.Move(Constants.m_rightTurn, Constants.coder_right, 1, -0, 0.2, Constants.m_rightDrive,false,Ticks);
+    Methods.Move(Constants.m_leftBTurn, Constants.coder_leftB, 1, -0, 0.2, Constants.m_leftBDrive,true,Ticks);
+    Methods.Move(Constants.m_leftTurn, Constants.coder_left, 1, -0, 0.2, Constants.m_leftDrive,false,Ticks);
+    Methods.Move(Constants.m_rightBTurn, Constants.coder_rightB, 1, -0, 0.2, Constants.m_rightBDrive,false,Ticks);
   }
 
 
@@ -126,22 +129,42 @@ public class Robot extends TimedRobot {
 // if this doesnt work as intended use "getRawButtonPressed" instead of "getRawButton" 
     // A Button
     if (Constants.m_controller.getRawButton(1)){
-      Methods.ArmMovement(Constants.m_Arm1, 0.75, false);
-      Methods.ArmMovement(Constants.m_Arm2, 0.75, false);
+      if (Constants.encoder.getAbsolutePosition() <= 0.592){
+        Methods.ArmMovement(Constants.m_Arm1, 0.75, false);
+        Methods.ArmMovement(Constants.m_Arm2, 0.75, false);
+      }
+      else{
+        Methods.ArmMovement(Constants.m_Arm1, 0, false);
+        Methods.ArmMovement(Constants.m_Arm2, 0, false);
+      }
+      
     }
     // Y Button
-    if (Constants.m_controller.getRawButton(4)){
-      Methods.ArmMovement(Constants.m_Arm1, -0.75, false);
-      Methods.ArmMovement(Constants.m_Arm2, -0.75, false);
+    if (Constants.m_controller.getRawButton(4) ){
+      if (Constants.encoder.getAbsolutePosition() >= 0.349){
+        Methods.ArmMovement(Constants.m_Arm1, -0.75, false);
+        Methods.ArmMovement(Constants.m_Arm2, -0.75, false);
+      }
+      else{
+        Methods.ArmMovement(Constants.m_Arm1, 0, false);
+        Methods.ArmMovement(Constants.m_Arm2, 0, false);
+      }
+
     }
     if (!Constants.m_controller.getRawButton(4) && !Constants.m_controller.getRawButton(1)){
       Methods.ArmMovement(Constants.m_Arm1, 0, true);
-      Methods.ArmMovement(Constants.m_Arm2, 0, true);
+      Methods.ArmMovement(Constants.m_Arm2, 0, true); 
     }
 
-    if (Constants.m_controller.getRawButton(3)){
-      Constants.m_Shooter1.set(1); 
-      Constants.m_Shooter2.set(1); 
+    if (Constants.m_controller.getRawButton(3) && !IsArmMoving ){
+      if (Ticks < 10 ){
+        Constants.m_Shooter1.set(-0.25); 
+        Constants.m_Shooter2.set(-0.25); 
+      }
+      else{
+        Constants.m_Shooter1.set(1); 
+        Constants.m_Shooter2.set(1); 
+      }     
       Intake_Speed = 1;
       
       Ticks += 1;
@@ -172,6 +195,7 @@ public class Robot extends TimedRobot {
     if (Constants.m_controller.getRawButton(2)){
       Constants.m_Intake.set(ControlMode.PercentOutput, 1);
       Intake_Speed2 = 1;
+      IsArmMoving = true;
     }
     else{
       if (Intake_Speed2 >= 0){
@@ -179,6 +203,7 @@ public class Robot extends TimedRobot {
       }
       if (Intake_Speed2 < 0){
         Intake_Speed2 = 0;
+        IsArmMoving = false;
       }
       Constants.m_Intake.set(ControlMode.PercentOutput, Intake_Speed2);
     }
