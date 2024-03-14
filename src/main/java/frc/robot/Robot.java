@@ -82,6 +82,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during teleoperated mode. */
   @Override
   public void teleopPeriodic() {
+    System.out.println(Constants.encoder.getAbsolutePosition());
     SpeedMulti = Constants.m_controller.getRawAxis(3)*2;
     Y_axis_speed = -Constants.m_controller.getRawAxis(1);
     X_axis_speed = Constants.m_controller.getRawAxis(0);

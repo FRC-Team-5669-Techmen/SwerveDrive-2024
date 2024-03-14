@@ -144,6 +144,11 @@ public static void ArmMovement(TalonSRX Motor1, double Amount_Moved, boolean tes
   // double drivepos = Motor1.getSelectedSensorPosition();
   // Amount_Moved *= (180/Math.PI);
   // Motor1.config_kP(0,0.4);
+  
+//  if (encoder.getAbsolutePosition()  ){
+
+//  }
+
   Motor1.set(ControlMode.PercentOutput,Amount_Moved);
   // Motor1.set(ControlMode.Position,drivepos);
   if (test == true ){
